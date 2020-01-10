@@ -1,28 +1,57 @@
 import React from "react";
-import PropTypes from "prop-types";
-// component => HTML 을 반환하는 함수
+import axios from "axios";
+import Movie from "./Movie";
+import "./App.css";
 
 class App extends React.Component {
-  // react 는 자동적으로 class component 의 render method 를 실행
-  // state 는 object 이며, component 의 data 를 넣을 공간이 있으며, 데이터가 변한다.
   state = {
-    count: 0
+    isLoading: true,
+    movies: []
   };
-
-  add = () => {
-    console.log("add");
+  getMovies = async () => {
+    // async => await 을 사용하려면 필요
+    // 이 함수가 비동기라는 것을 알려줌
+    // axios 가 끝날 때까지 기다렸다가 계속 진행
+    const {
+      data: {
+        data: { movies }
+      }
+    } = await axios.get(
+      "https://yts-proxy.now.sh/list_movies.json?sort_by=rating"
+    );
+    this.setState({ movies, isLoading: false });
   };
-  minus = () => {
-    console.log("minus");
-  };
-
+  componentDidMount() {
+    // setTimeout => delay function
+    // setTimeout(() => {
+    //   this.setState({ isLoading: false });
+    // }, 6000); 6초 뒤 isLoading 의 상태가 false 로 변경
+    this.getMovies();
+  }
   render() {
+    const { isLoading, movies } = this.state;
     return (
-      <div>
-        <h1>The number is: {this.state.count}</h1>
-        <button onClick={this.add}>Add</button>
-        <button onClick={this.minus}>Minus</button>
-      </div>
+      <section className="container">
+        {isLoading ? (
+          <div className="loader">
+            <span className="loader_text">Loading...</span>
+          </div>
+        ) : (
+          <div className="movies">
+            {movies.map(movie => (
+              <Movie
+                key={movie.id}
+                id={movie.id}
+                year={movie.year}
+                title={movie.title}
+                summary={movie.summary}
+                poster={movie.medium_cover_image}
+                genres={movie.genres}
+              ></Movie>
+            ))}
+          </div>
+        )}
+      </section>
     );
   }
 }

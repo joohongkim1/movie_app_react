@@ -10,10 +10,18 @@ class App extends React.Component {
   };
 
   add = () => {
-    console.log("add");
+    // 직접 state 를 변경하면 안됨.
+    // this.state.count = 1;
+    // setState 를 호출하면 react 가 state 를 refresh 하고,
+    // render function 을 호출한다.
+    this.setState(current => ({
+      count: current.count + 1
+    }));
   };
   minus = () => {
-    console.log("minus");
+    this.setState(current => ({
+      count: current.count - 1
+    }));
   };
 
   render() {

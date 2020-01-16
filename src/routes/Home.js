@@ -9,9 +9,6 @@ class Home extends React.Component {
     movies: []
   };
   getMovies = async () => {
-    // async => await 을 사용하려면 필요
-    // 이 함수가 비동기라는 것을 알려줌
-    // axios 가 끝날 때까지 기다렸다가 계속 진행
     const {
       data: {
         data: { movies }
@@ -22,10 +19,6 @@ class Home extends React.Component {
     this.setState({ movies, isLoading: false });
   };
   componentDidMount() {
-    // setTimeout => delay function
-    // setTimeout(() => {
-    //   this.setState({ isLoading: false });
-    // }, 6000); 6초 뒤 isLoading 의 상태가 false 로 변경
     this.getMovies();
   }
   render() {
@@ -34,7 +27,7 @@ class Home extends React.Component {
       <section className="container">
         {isLoading ? (
           <div className="loader">
-            <span className="loader_text">Loading...</span>
+            <span className="loader__text">Loading...</span>
           </div>
         ) : (
           <div className="movies">
@@ -47,7 +40,7 @@ class Home extends React.Component {
                 summary={movie.summary}
                 poster={movie.medium_cover_image}
                 genres={movie.genres}
-              ></Movie>
+              />
             ))}
           </div>
         )}
